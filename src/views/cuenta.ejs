@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <h1>Hola, <%= username %> !</h1>
+    <input type="text" placeholder="Cuéntanos sobre ti...">
+    <span><%= currentEmail %></span>
+    <a href="/new_pass">Reestablecer contraseña</a>
+    <a href="/log_out"><button>Cerrar sesión</button></a>
+</body>
+</html>

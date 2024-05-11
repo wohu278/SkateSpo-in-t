@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reestablecer contraseña</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <form action="/new_pass/<%= username %>" method="post">
+        <input type="password" name="pass" placeholder="Nueva contraseña" required>
+        <button>Aceptar</button>
+    </form>
+</body>
+</html>
