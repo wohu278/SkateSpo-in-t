@@ -21,6 +21,11 @@
         <b><%= comments[i].username %></b>
         <p><%= comments[i].comentario %></p>
         <p><%= comments[i].fecha %></p>
+        <% if(user_regis && comments[i].username === currentUser) { %>
+            <form action="/post/<%= post.nombre %>/comment/<%= comments[i].id %>/delete" method="post">
+                <button type="submit">Eliminar</button>
+            </form>
+        <% } %>
         <br>
         <br>
 

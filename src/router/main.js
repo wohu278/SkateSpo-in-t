@@ -64,25 +64,44 @@ router.get('/post/:nombre', async(req, res) => {
 })
 
 router.post('/post/:nombre/comment', async(req, res) => {
-
-    if(user_regis == false) {
-
-        res.redirect('/login')
-
+    if (!user_regis) {
+        res.redirect('/login');
+        return;
     }
 
-    const {nombre} = req.params
-    const {comentario} = req.body
-    const connection = await connectBD()
+    const { nombre } = req.params;
+    const { comentario } = req.body;
+    const connection = await connectBD();
 
-    const [rows, fields] = await connection.execute("SELECT id FROM blog_posts WHERE nombre = ?", [nombre])
-    const post = rows[0]
+    // Obtener la información del post
+    const [postInfo] = await connection.execute("SELECT id FROM blog_posts WHERE nombre = ?", [nombre]);
+    const postId = postInfo[0].id;
 
-    await connection.execute('INSERT INTO blog_comments(post_id, user_id, username, comentario) VALUES (?,?,?,?)', [post.id, currentUser, currentUser, comentario]);
+    // Obtener el user_id del usuario actual
+    const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
+    const userId = userData[0].id;
 
-    res.redirect(`/post/${nombre}`)
+    // Insertar el comentario en la base de datos
+    await connection.execute('INSERT INTO blog_comments(post_id, user_id, username, comentario) VALUES (?,?,?,?)', [postId, userId, currentUser, comentario]);
 
-})
+    res.redirect(`/post/${nombre}`);
+});
+
+
+
+router.post('/post/:nombre/comment/:commentId/delete', async(req, res) => {
+    const { nombre, commentId } = req.params;
+    const connection = await connectBD();
+
+    // Verifica si el comentario pertenece al usuario registrado
+    const [comment] = await connection.execute('SELECT * FROM blog_comments WHERE id = ?', [commentId]);
+    if (comment.length > 0 && comment[0].username === currentUser) {
+        // Elimina el comentario si el usuario registrado es el propietario del comentario
+        await connection.execute('DELETE FROM blog_comments WHERE id = ?', [commentId]);
+    }
+
+    res.redirect(`/post/${nombre}`);
+});
 
 router.get('/contacto', (req, res) => {
 
