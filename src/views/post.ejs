@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.nombre %></title>
+</head>
+<body>
+
+    <%- include('partials/header') %>
+
+    <br>
+
+    <h1><%= post.nombre %></h1>
+    <p><%= post.descripcion %></p>
+    <iframe width="928" height="522" src="https://www.youtube.com/embed/<%= post.enlace %>" title="<%= post.nombre %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <h2>Comentarios</h2>
+    <% for(let i = 0; i<comments.length; i++) {%>
+
+        <b><%= comments[i].username %></b>
+        <p><%= comments[i].comentario %></p>
+        <p><%= comments[i].fecha %></p>
+        <br>
+        <br>
+
+    <% } %>
+
+    <% if(user_regis) {%>
+
+        <p>Agregar un comentario:</p>
+        <form action="/post/<%= post.nombre %>/comment" method="post">
+            <textarea name="comentario" required></textarea>
+            <button type="submit">Añadir</button>
+        </form>
+
+    <%} else {%>
+        <p><a href="/login">Inicia sesión para comentar</p></a>
+    <% } %>
+
+</body>
+</html>

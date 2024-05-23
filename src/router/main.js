@@ -38,6 +38,58 @@ router.get('/', (req, res) => {
 
 })
 
+router.get('/blog', async(req, res) => {
+
+    const connection = await connectBD()
+
+    const {id} = req.params
+
+    const [rows, fields] = await connection.execute('SELECT * FROM blog_posts')
+
+    res.render('blog_posts', {blog_posts:rows})
+
+})
+
+router.get('/post/:nombre', async(req, res) => {
+
+    const {nombre} = req.params
+    const connection = await connectBD()
+    const [rows, fields] = await connection.execute("SELECT * FROM blog_posts WHERE nombre = ?", [nombre])
+    const post = rows[0]
+
+    const [comments] = await connection.execute("SELECT * FROM blog_comments WHERE post_id = ?", [post.id])
+
+    res.render('post', {post, comments, user_regis})
+
+})
+
+router.post('/post/:nombre/comment', async(req, res) => {
+
+    if(user_regis == false) {
+
+        res.redirect('/login')
+
+    }
+
+    const {nombre} = req.params
+    const {comentario} = req.body
+    const connection = await connectBD()
+
+    const [rows, fields] = await connection.execute("SELECT id FROM blog_posts WHERE nombre = ?", [nombre])
+    const post = rows[0]
+
+    await connection.execute('INSERT INTO blog_comments(post_id, user_id, username, comentario) VALUES (?,?,?,?)', [post.id, currentUser, currentUser, comentario]);
+
+    res.redirect(`/post/${nombre}`)
+
+})
+
+router.get('/contacto', (req, res) => {
+
+    res.render('contacto')
+
+})
+
 router.get('/login', (req, res) => {
 
     res.render('login')

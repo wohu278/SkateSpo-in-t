@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+</head>
+<body>
+
+    <%- include('partials/header') %>
+
+    <br>
+
+    <% for(let i = 0; i<blog_posts.length; i++) {%>
+
+        <a href="/post/<%= blog_posts[i].nombre %>">
+            <img src="<%= blog_posts[i].portada %>" alt="">
+            <h1><%= blog_posts[i].nombre %></h1>
+            <p><%= blog_posts[i].descripcion %></p>
+        </a>
+
+    <% } %>
+    
+</body>
+</html>
