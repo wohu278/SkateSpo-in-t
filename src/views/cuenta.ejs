@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuenta</title>
+    <link rel="stylesheet" href="/path/to/your/css/styles.css">
 </head>
 <body>
     <%- include('partials/header') %>
-    <h1>Hola, <%= username %> !</h1>
-    <input type="text" placeholder="Cuéntanos sobre ti...">
-    <span><%= currentEmail %></span>
-    <a href="/new_pass">Reestablecer contraseña</a>
-    <a href="/log_out"><button>Cerrar sesión</button></a>
+    <main>
+        <section id="account-details">
+            <h1>Hola, <%= username %>!</h1>
+            <form action="/update_profile" method="post">
+                <div class="email-info">
+                    <span>Email: <%= currentEmail %></span>
+                </div>
+                <div class="actions">
+                    <a href="/new_pass">Reestablecer contraseña</a>
+                    <a href="/log_out"><button type="button">Cerrar sesión</button></a>
+                </div>
+            </form>
+        </section>
+        
+        <section id="favorites">
+            <h2>Favoritos</h2>
+            <% if (favorites.length > 0) { %>
+                <% for(let i = 0; i < favorites.length; i++) { %>
+                    <article class="blog-post">
+                        <a href="/post/<%= favorites[i].nombre %>">
+                            <img src="<%= favorites[i].portada %>" alt="<%= favorites[i].nombre %> portada" loading="lazy">
+                            <h1><%= favorites[i].nombre %></h1>
+                            <p><%= favorites[i].descripcion %></p>
+                        </a>
+                    </article>
+                <% } %>
+            <% } else { %>
+                <p>No tienes posts favoritos.</p>
+            <% } %>
+        </section>
+    </main>
 </body>
 </html>

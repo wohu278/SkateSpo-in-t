@@ -39,16 +39,32 @@ router.get('/', (req, res) => {
 })
 
 router.get('/blog', async(req, res) => {
-
     const connection = await connectBD()
-
-    const {id} = req.params
 
     const [rows, fields] = await connection.execute('SELECT * FROM blog_posts')
 
-    res.render('blog_posts', {blog_posts:rows})
-
+    res.render('blog_posts', { blog_posts: rows, user_regis: user_regis }) // Asegúrate de pasar user_regis aquí
 })
+
+
+router.post('/favorite', async (req, res) => {
+    if (!user_regis) {
+        res.redirect('/login');
+        return;
+    }
+
+    const { postId } = req.body;
+    const connection = await connectBD();
+
+    // Obtener el user_id del usuario actual
+    const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
+    const userId = userData[0].id;
+
+    // Insertar el post favorito en la base de datos
+    await connection.execute('INSERT INTO user_favorites (user_id, post_id) VALUES (?, ?)', [userId, postId]);
+
+    res.redirect('/blog');
+});
 
 router.get('/post/:nombre', async(req, res) => {
 
@@ -196,21 +212,22 @@ router.get('/cuenta', (req, res) => {
 
 })
 
-router.get('/cuenta/:username', (req, res) => {
+router.get('/cuenta/:username', async (req, res) => {
+    if (user_regis && req.params.username === currentUser) {
+        const connection = await connectBD();
 
-    if(user_regis == true) {
+        const [favorites] = await connection.execute(`
+            SELECT bp.* FROM blog_posts bp
+            JOIN user_favorites uf ON bp.id = uf.post_id
+            WHERE uf.user_id = (SELECT id FROM skate_users WHERE username = ?)
+        `, [currentUser]);
 
-        const {username} = req.params
-        res.render('cuenta', {username, currentEmail})
-
+        res.render('cuenta', { username: currentUser, currentEmail, favorites });
+    } else {
+        res.redirect('/login');
     }
-    else {
+});
 
-        res.redirect('/login')
-
-    }
-
-})
 
 router.get('/log_out', (req, res) => {
 
