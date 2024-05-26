@@ -7,18 +7,22 @@ require('dotenv').config();
 const router = Router()
 
 async function connectBD() {
-
-    const connection = await mysql.createConnection({
-
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE
-
-    })
-
-    return connection
-
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            port: process.env.DB_PORT || 3306,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+            ssl: { rejectUnauthorized: false }  // Asegúrate de que SSL esté configurado si es necesario
+        });
+        console.log('Connected to the database');
+        return connection;
+    } catch (error) {
+        console.error('Error connecting to the database:', error.code);
+        console.error('Error details:', error);
+        throw error;
+    }
 }
 
 let user_regis = false
@@ -41,13 +45,22 @@ router.get('/', (req, res) => {
 
 })
 
-router.get('/blog', async(req, res) => {
-    const connection = await connectBD()
+router.get('/blog', async (req, res) => {
+    let connection;
+    try {
+        connection = await connectBD();
+        const [rows] = await connection.execute('SELECT * FROM blog_posts');
+        res.render('blog_posts', { blog_posts: rows, user_regis });
+    } catch (error) {
+        console.error('Error fetching blog posts', error);
+        res.status(500).send('Error fetching blog posts');
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
+    }
+});
 
-    const [rows, fields] = await connection.execute('SELECT * FROM blog_posts')
-
-    res.render('blog_posts', { blog_posts: rows, user_regis: user_regis }) // Asegúrate de pasar user_regis aquí
-})
 
 
 // Ruta para agregar un post a favoritos
