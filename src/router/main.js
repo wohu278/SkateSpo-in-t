@@ -25,6 +25,8 @@ let user_regis = false
 let currentEmail = ''
 let currentUser = ''
 
+console.log("OK");
+
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
