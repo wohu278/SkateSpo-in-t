@@ -1,6 +1,8 @@
 const {Router} = require('express')
 const mysql = require('mysql2/promise')
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const router = Router()
 
@@ -20,9 +22,8 @@ async function connectBD() {
 }
 
 let user_regis = false
-
-const nodemailer = require('nodemailer');
-
+let currentEmail = ''
+let currentUser = ''
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -152,6 +153,11 @@ router.post('/login', async(req, res) => {
             res.redirect('/')
 
         }
+        else{
+
+            res.send('Datos incorrectos')
+
+        }
 
     }
     else {
@@ -199,7 +205,7 @@ Disfruta de nuestro contenido ahora: http://localhost:3000/`
 
 router.get('/cuenta', (req, res) => {
 
-    if(user_regis == true) {
+    if(user_regis) {
 
         res.redirect('/cuenta/'+currentUser)
 
@@ -239,7 +245,7 @@ router.get('/log_out', (req, res) => {
 
 router.get('/new_pass', (req, res) => {
 
-    if(user_regis == true) {
+    if(user_regis) {
 
         res.redirect('/new_pass/'+currentUser)
 
@@ -272,35 +278,30 @@ router.get('/new_pass/:username', async(req, res) => {
 
 })
 
-router.post('/new_pass/:username', async(req, res) => {
-
-    const {username} = req.params
-    const connection = await connectBD()
-
-    const {pass} = req.body
-
+router.post('/new_pass/:username', async (req, res) => {
+    const { username } = req.params;
+    const { pass } = req.body;
+    const connection = await connectBD();
     const encriptPass = await bcrypt.hash(pass, 10);
     await connection.execute('UPDATE skate_users SET pass = ? WHERE username = ?', [encriptPass, username]);
 
-
     const mailOptions = {
-        from: 'contactskatespoint@gmail.com',
+        from: process.env.EMAIL_USER,
         to: currentEmail,
         subject: 'Cambio de contraseña',
-        text: `Hola ${username}, le informamos de que su contraseña ha sido reestablecida`
+        text: `Hola ${username}, le informamos de que su contraseña ha sido cambiada`
     };
 
-    transporter.sendMail(mailOptions, function(error, info) {
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {
-            console.log('Correo electrónico de cambio de contraseña enviado a: ' + email);
+            console.log('Correo electrónico de confirmación enviado a: ' + currentEmail);
         }
     });
 
-    res.redirect('/')
-
-})
+    res.redirect('/cuenta');
+});
 
 router.use((req, res, next) => {
 
