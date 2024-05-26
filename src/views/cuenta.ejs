@@ -32,10 +32,14 @@
                             <h1><%= favorites[i].nombre %></h1>
                             <p><%= favorites[i].descripcion %></p>
                         </a>
+                        <form action="/favorite/delete/<%= favorites[i].id %>" method="post">
+                            <button type="submit">Quitar de favoritos</button>
+                        </form>
                     </article>
                 <% } %>
             <% } else { %>
                 <p>No tienes posts favoritos.</p>
+                <a href="/blog">Ver posts</a>
             <% } %>
         </section>
     </main>

@@ -48,6 +48,7 @@ router.get('/blog', async(req, res) => {
 })
 
 
+// Ruta para agregar un post a favoritos
 router.post('/favorite', async (req, res) => {
     if (!user_regis) {
         res.redirect('/login');
@@ -61,11 +62,41 @@ router.post('/favorite', async (req, res) => {
     const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
     const userId = userData[0].id;
 
+    // Verificar si el post ya está en la lista de favoritos del usuario
+    const [existingFavorite] = await connection.execute('SELECT * FROM user_favorites WHERE user_id = ? AND post_id = ?', [userId, postId]);
+    if (existingFavorite.length > 0) {
+        // El post ya está en la lista de favoritos, no es necesario añadirlo de nuevo
+        res.redirect('/blog');
+        return;
+    }
+
     // Insertar el post favorito en la base de datos
     await connection.execute('INSERT INTO user_favorites (user_id, post_id) VALUES (?, ?)', [userId, postId]);
 
     res.redirect('/blog');
 });
+
+
+// Ruta para eliminar un post favorito
+router.post('/favorite/delete/:postId', async (req, res) => {
+    if (!user_regis) {
+        res.redirect('/login');
+        return;
+    }
+
+    const { postId } = req.params;
+    const connection = await connectBD();
+
+    // Obtener el user_id del usuario actual
+    const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
+    const userId = userData[0].id;
+
+    // Eliminar el post favorito de la base de datos
+    await connection.execute('DELETE FROM user_favorites WHERE user_id = ? AND post_id = ?', [userId, postId]);
+
+    res.redirect('/cuenta');
+});
+
 
 router.get('/post/:nombre', async(req, res) => {
 
@@ -175,12 +206,22 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', async(req, res) => {
+    const { username, email, pass } = req.body;
+    const encriptPass = await bcrypt.hash(pass, 10);
+    const connection = await connectBD();
 
-    const {username, email, pass} = req.body
-    const encriptPass = await bcrypt.hash(pass, 10)
-    const connection = await connectBD()
+    // Verificar si el correo electrónico o el nombre de usuario ya están registrados
+    const [existingUser] = await connection.execute('SELECT * FROM skate_users WHERE email = ? OR username = ?', [email, username]);
+    if (existingUser.length > 0) {
+        // Si el correo electrónico o el nombre de usuario ya están en uso, enviar una respuesta de error correspondiente
+        if (existingUser[0].email === email) {
+            return res.status(400).send('La dirección de correo ya está registrada');
+        } else {
+            return res.status(400).send('El nombre de usuario ya está registrado');
+        }
+    }
 
-    await connection.execute('INSERT INTO skate_users (username, email, pass) VALUES (?,?,?)', [username, email, encriptPass])
+    await connection.execute('INSERT INTO skate_users (username, email, pass) VALUES (?,?,?)', [username, email, encriptPass]);
 
     const mailOptions = {
         from: 'contactskatespoint@gmail.com',
@@ -199,9 +240,9 @@ Disfruta de nuestro contenido ahora: http://localhost:3000/`
         }
     });
 
-    res.redirect('/login')
+    res.redirect('/login');
+});
 
-})
 
 router.get('/cuenta', (req, res) => {
 
