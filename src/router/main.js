@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const router = Router()
 
+//Conexión a la base de datos
 async function connectBD() {
     try {
         const connection = await mysql.createConnection({
@@ -15,21 +16,25 @@ async function connectBD() {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE
         });
-        console.log('Connected to the database');
-        return connection;
+        //Si la conexión funciona, nos da por consola que está conectado
+        console.log('Conectado a la base de datos')
+        return connection
+    //Si no, nos da el error
     } catch (error) {
-        console.error('Error connecting to the database:', error.code);
-        console.error('Error details:', error);
-        throw error;
+        console.error('Error conectándose a la base de datos:', error.code)
+        console.error('Detalles:', error)
+        throw error
     }
 }
 
-let user_regis = false
-let currentEmail = ''
-let currentUser = ''
+let user_regis = false //Variable para el inicio de sesión, al principio está en false parano poder entrar a ciertas rutas bloquedas
+let currentEmail = '' //Guarda el email que se registra en el login
+let currentUser = '' //Guarda el usuario que se registra en el login
 
-console.log("OK");
+//Chekeo de que todo funciona correctamente en la ejecución del código
+console.log("OK")
 
+//Creamos el servicio de correo electrónico
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -38,40 +43,44 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+//Ruta de inicio
 router.get('/', (req, res) => {
 
     res.render('inicio')
 
 })
 
+//Ruta del blog
 router.get('/blog', async (req, res) => {
-    let connection;
-    try {
-        connection = await connectBD();
-        const [rows] = await connection.execute('SELECT * FROM blog_posts');
+    let connection = await connectBD()
+
+    const [rows] = await connection.execute('SELECT * FROM blog_posts');
         
-        let userId
-        if (user_regis) {
-            const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
-            userId = userData[0].id;
-        }
-
-        // Obtener la lista de favoritos del usuario si está registrado
-        let favorites = [];
-        if (userId) {
-            const [userFavorites] = await connection.execute('SELECT post_id FROM user_favorites WHERE user_id = ?', [userId]);
-            favorites = userFavorites.map(favorite => favorite.post_id);
-        }
-
-        res.render('blog_posts', { blog_posts: rows, user_regis, favorites });
-    } catch (error) {
-        console.error('Error fetching blog posts', error);
-        res.status(500).send('Error fetching blog posts');
-    } finally {
-        if (connection) {
-            await connection.end();
-        }
+    let userId
+    if (user_regis) {
+        const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
+        userId = userData[0].id;
     }
+
+    // Obtener la lista de favoritos del usuario si está registrado
+    let favorites = [];
+    if (userId) {
+        const [userFavorites] = await connection.execute('SELECT post_id FROM user_favorites WHERE user_id = ?', [userId]);
+        favorites = userFavorites.map(favorite => favorite.post_id);
+    }
+
+    res.render('blog_posts', { blog_posts: rows, user_regis, favorites });
+
+    // try {
+        
+    // } catch (error) {
+    //     console.error('Error fetching blog posts', error);
+    //     res.status(500).send('Error fetching blog posts');
+    // } finally {
+    //     if (connection) {
+    //         await connection.end();
+    //     }
+    // }
 });
 
 
