@@ -17,7 +17,7 @@
                     <a href="/post/<%= blog_posts[i].nombre %>">
                         <img src="<%= blog_posts[i].portada %>" alt="<%= blog_posts[i].nombre %> portada" loading="lazy">
                         <h1><%= blog_posts[i].nombre %></h1>
-                        <p><%= blog_posts[i].descripcion %></p>
+                        <p>Descubre más...</p>
                     </a>
                     <% if (user_regis) { %>
                         <form action="/favorite" method="post">

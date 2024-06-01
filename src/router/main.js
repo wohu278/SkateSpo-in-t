@@ -122,7 +122,7 @@ router.get('/post/:nombre', async(req, res) => {
 
     const [comments] = await connection.execute("SELECT * FROM blog_comments WHERE post_id = ?", [post.id])
 
-    res.render('post', {post, comments, user_regis})
+    res.render('post', {post, comments, user_regis, currentUser})
 
 })
 
@@ -166,7 +166,7 @@ router.post('/post/:nombre/comment/:commentId/delete', async(req, res) => {
     res.redirect(`/post/${nombre}`);
 });
 
-router.get('/contacto', (req, res) => {
+router.get('/ayuda', (req, res) => {
 
     res.render('contacto')
 

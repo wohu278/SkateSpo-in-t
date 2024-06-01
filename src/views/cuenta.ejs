@@ -10,7 +10,7 @@
     <%- include('partials/header') %>
     <main>
         <section id="account-details">
-            <h1>Hola, <%= username %>!</h1>
+            <h1>¡Hola, <%= username %>!</h1>
             <form action="/update_profile" method="post">
                 <div class="email-info">
                     <span>Email: <%= currentEmail %></span>
@@ -23,14 +23,14 @@
         </section>
         
         <section id="favorites">
-            <h2>Favoritos</h2>
+            <h2>Tus posts favoritos</h2>
             <% if (favorites.length > 0) { %>
                 <% for(let i = 0; i < favorites.length; i++) { %>
                     <article class="blog-post">
                         <a href="/post/<%= favorites[i].nombre %>">
                             <img src="<%= favorites[i].portada %>" alt="<%= favorites[i].nombre %> portada" loading="lazy">
                             <h1><%= favorites[i].nombre %></h1>
-                            <p><%= favorites[i].descripcion %></p>
+                            <p>Descubre más...</p>
                         </a>
                         <form action="/favorite/delete/<%= favorites[i].id %>" method="post">
                             <button type="submit">Quitar de favoritos</button>
@@ -39,7 +39,7 @@
                 <% } %>
             <% } else { %>
                 <p>No tienes posts favoritos.</p>
-                <a href="/blog">Ver posts</a>
+                <a href="/blog">Ver blog</a>
             <% } %>
         </section>
     </main>
