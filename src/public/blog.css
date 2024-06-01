@@ -30,4 +30,19 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .blog .posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .blog .posts img {
+    width: 300px;
+    height: 150px;
+  }
+  .blog .posts .blogPost {
+    width: 90%;
+  }
 }/*# sourceMappingURL=blog.css.map */

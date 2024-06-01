@@ -44,4 +44,21 @@ h2 {
 .register .infoRegis a {
   color: black;
   font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+  .register .imgRegis {
+    display: none;
+  }
+  .register .infoRegis {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid;
+  }
+  .register .infoRegis button {
+    width: 50%;
+  }
 }/*# sourceMappingURL=register.css.map */

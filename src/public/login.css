@@ -37,4 +37,20 @@ h2 {
 .login .infoLog a {
   color: black;
   font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+  .login .imgLog {
+    display: none;
+  }
+  .login .infoLog {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .login .infoLog button {
+    width: 50%;
+  }
 }/*# sourceMappingURL=login.css.map */

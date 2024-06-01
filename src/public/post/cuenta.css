@@ -59,4 +59,17 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .perfil .detalles {
+    text-align: center;
+  }
+  .perfil .favoritos .blogPost {
+    width: 100%;
+  }
+  .perfil .favoritos .blogPost img {
+    width: 300px;
+    height: 200px;
+  }
 }/*# sourceMappingURL=cuenta.css.map */

@@ -20,4 +20,10 @@
   width: 50%;
   border-radius: 10px;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .new_pass {
+    text-align: center;
+  }
 }/*# sourceMappingURL=new_pass.css.map */

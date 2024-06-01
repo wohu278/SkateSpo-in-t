@@ -15,15 +15,12 @@
         <div class="detalles">
             <h1>¡Hola, <%= username %>!</h1>
             <br>
-            <form action="/update_profile" method="post">
-                <span>Tu email: <b><%= currentEmail %></b></span>
+            <span>Tu email: <b><%= currentEmail %></b></span>
+            <div class="acciones">
+                <a href="/new_pass">Restablecer contraseña</a>
+                <a href="/log_out"><button type="button">Cerrar sesión</button></a>
                 <br>
-                <div class="acciones">
-                    <a href="/new_pass">Restablecer contraseña</a>
-                    <a href="/log_out"><button type="button">Cerrar sesión</button></a>
-                    <br>
-                </div>
-            </form>
+            </div>
         </div>
         <div class="favoritos">
             <h2 class="favTitulo">Tus posts favoritos</h2>
