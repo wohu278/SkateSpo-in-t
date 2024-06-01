@@ -41,6 +41,7 @@
 
         <% } %>
 
+        <!-- Si el usurio está registrado, se puede comentar -->
         <% if(user_regis) {%>
 
             <div class="comentUser">
@@ -51,6 +52,7 @@
                 </form>
             </div>
 
+        <!-- Si no, se le da la opción de iniciar sesión -->
         <%} else {%>
             <p><a href="/login">Inicia sesión para comentar</p></a>
         <% } %>

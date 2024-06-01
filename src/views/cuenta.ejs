@@ -24,6 +24,7 @@
         </div>
         <div class="favoritos">
             <h2 class="favTitulo">Tus posts favoritos</h2>
+            <!-- Se comprueba si hay favoritos para ese usuario -->
             <% if (favorites.length > 0) { %>
                 <% for(let i = 0; i < favorites.length; i++) { %>
                     <div class="blogPost">
@@ -38,22 +39,12 @@
                     </div>
                     <br>
                 <% } %>
+            <!-- Si no los hay, se muestra que el usuario no tiene favoritos -->
             <% } else { %>
                 <p>No tienes posts favoritos.</p>
                 <a href="/blog">Ver blog</a>
             <% } %>
         </div>
-
     </div>
-
-    <main>
-        <section id="account-details">
-            
-        </section>
-        
-        <section id="favorites">
-            
-        </section>
-    </main>
 </body>
 </html>

@@ -23,14 +23,19 @@
                         <h2><%= blog_posts[i].nombre %></h2>
                         <p>Descubre más...</p>
                     </a>
+                    <!-- Si el usuario está registrado, se muestra el botón de añadir a favoritos -->
                     <% if(user_regis) { %>
+                        <!-- Variable para el id del post -->
                         <% const postId = blog_posts[i].id; %>
+                        <!-- Se comprueba si el post está en favoritos -->
                         <% const isFavorite = favorites.includes(postId); %>
                         <form action="/favorite" method="post">
                             <input type="hidden" name="postId" value="<%= blog_posts[i].id %>">
+                            <!-- Si el post está añadido, se marca en rojo -->
                             <% if (typeof isFavorite !== 'undefined' && isFavorite) { %>
                                 <button type="submit"><i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i></button>
                                 <a href="/cuenta"><p>Quitar de favoritos</p></a>
+                            <!-- Si no lo está no se marca -->
                             <% } else { %>
                                 <button type="submit"><i class="fa-regular fa-heart fa-2xl" style="color: #000000;"></i></button>
                             <% } %>
@@ -39,14 +44,7 @@
                     </div>
             <% } %>
         </div>
-
     </div>
-
-    <main>
-        <section id="blog-posts">
-            
-        </section>
-    </main>
     
 </body>
 </html>
