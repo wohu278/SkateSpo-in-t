@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "devstart": "nodemon src/index.js"
+    "devstart": "nodemon src/index.js",
+    "sass": "sass --watch src/scss:public"
   },
   "author": "",
   "license": "ISC",

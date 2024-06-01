@@ -4,14 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="icon" href="/static/logo empty.png" type="image/png">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <%- include('partials/header') %>
-    <form action="/login" method="post">
-        <input type="text" placeholder="Nombre de usuario" required name="username">
-        <input type="password" placeholder="Contraseña" required name="pass">
-        <button>Acceder</button>
-        <span>¿No tienes cuenta ? <a href="/register">Regístrate</a></span>
-    </form>
+    <div class="login">
+        <div class="imgLog">
+            <img src="/static/Paul-Rodriguez-air.jpg" alt="">
+        </div>
+        <div class="infoLog">
+            <form action="/login" method="post">
+                <h2>Iniciar Sesión</h2>
+                <input type="text" placeholder="Nombre de usuario" required name="username">
+                <br>
+                <br>
+                <input type="password" placeholder="Contraseña" required name="pass">
+                <br>
+                <br>
+                <button>Acceder</button>
+                <br>
+                <br>
+                <span>¿No tienes cuenta ? <a href="/register">Regístrate</a></span>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

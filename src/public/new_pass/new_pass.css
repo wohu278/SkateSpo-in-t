@@ -1,0 +1,23 @@
+.new_pass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.new_pass h1 {
+  color: #357DED;
+}
+.new_pass input {
+  height: 35px;
+  width: 200px;
+  padding: 5px;
+}
+.new_pass button {
+  background-color: #0287C0;
+  border: none;
+  color: white;
+  padding: 10px;
+  width: 50%;
+  border-radius: 10px;
+  cursor: pointer;
+}/*# sourceMappingURL=new_pass.css.map */

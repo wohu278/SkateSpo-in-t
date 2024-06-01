@@ -13,8 +13,7 @@ async function connectBD() {
             port: process.env.DB_PORT || 3306,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_DATABASE,
-            ssl: { rejectUnauthorized: false }  // Asegúrate de que SSL esté configurado si es necesario
+            database: process.env.DB_DATABASE
         });
         console.log('Connected to the database');
         return connection;
@@ -50,7 +49,21 @@ router.get('/blog', async (req, res) => {
     try {
         connection = await connectBD();
         const [rows] = await connection.execute('SELECT * FROM blog_posts');
-        res.render('blog_posts', { blog_posts: rows, user_regis });
+        
+        let userId
+        if (user_regis) {
+            const [userData] = await connection.execute('SELECT id FROM skate_users WHERE username = ?', [currentUser]);
+            userId = userData[0].id;
+        }
+
+        // Obtener la lista de favoritos del usuario si está registrado
+        let favorites = [];
+        if (userId) {
+            const [userFavorites] = await connection.execute('SELECT post_id FROM user_favorites WHERE user_id = ?', [userId]);
+            favorites = userFavorites.map(favorite => favorite.post_id);
+        }
+
+        res.render('blog_posts', { blog_posts: rows, user_regis, favorites });
     } catch (error) {
         console.error('Error fetching blog posts', error);
         res.status(500).send('Error fetching blog posts');
@@ -118,6 +131,11 @@ router.get('/post/:nombre', async(req, res) => {
     const {nombre} = req.params
     const connection = await connectBD()
     const [rows, fields] = await connection.execute("SELECT * FROM blog_posts WHERE nombre = ?", [nombre])
+    if (!rows || rows.length === 0) {
+        console.error('No se encontraron publicaciones con el nombre proporcionado');
+        // Manejar el caso en el que no se encuentran publicaciones con el nombre proporcionado
+        return res.status(404).send('No se encontraron publicaciones con el nombre proporcionado');
+    }
     const post = rows[0]
 
     const [comments] = await connection.execute("SELECT * FROM blog_comments WHERE post_id = ?", [post.id])
@@ -201,14 +219,14 @@ router.post('/login', async(req, res) => {
         }
         else{
 
-            res.send('Datos incorrectos')
+            res.status(400).render('datosIncorrectos')
 
         }
 
     }
     else {
 
-        res.send("Datos incorrectos")
+        res.status(400).render('datosIncorrectos')
 
     }
 
@@ -221,18 +239,24 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', async(req, res) => {
-    const { username, email, pass } = req.body;
+    const { username, email, pass, confirmPass } = req.body;
     const encriptPass = await bcrypt.hash(pass, 10);
     const connection = await connectBD();
+
+    if(pass != confirmPass) {
+
+        return res.status(400).render('contraseñaIncorrecta')
+
+    }
 
     // Verificar si el correo electrónico o el nombre de usuario ya están registrados
     const [existingUser] = await connection.execute('SELECT * FROM skate_users WHERE email = ? OR username = ?', [email, username]);
     if (existingUser.length > 0) {
         // Si el correo electrónico o el nombre de usuario ya están en uso, enviar una respuesta de error correspondiente
         if (existingUser[0].email === email) {
-            return res.status(400).send('La dirección de correo ya está registrada');
+            return res.status(400).render('emailRegistrado');
         } else {
-            return res.status(400).send('El nombre de usuario ya está registrado');
+            return res.status(400).render('usuarioRegistrado')
         }
     }
 

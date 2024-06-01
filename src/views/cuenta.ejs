@@ -4,43 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuenta</title>
-    <link rel="stylesheet" href="/path/to/your/css/styles.css">
+    <link rel="stylesheet" href="/post/style.css">
+    <link rel="stylesheet" href="/post/cuenta.css">
+    <link rel="icon" href="/static/logo empty.png" type="image/png">
 </head>
 <body>
     <%- include('partials/header') %>
-    <main>
-        <section id="account-details">
+
+    <div class="perfil">
+        <div class="detalles">
             <h1>¡Hola, <%= username %>!</h1>
+            <br>
             <form action="/update_profile" method="post">
-                <div class="email-info">
-                    <span>Email: <%= currentEmail %></span>
-                </div>
-                <div class="actions">
-                    <a href="/new_pass">Reestablecer contraseña</a>
+                <span>Tu email: <b><%= currentEmail %></b></span>
+                <br>
+                <div class="acciones">
+                    <a href="/new_pass">Restablecer contraseña</a>
                     <a href="/log_out"><button type="button">Cerrar sesión</button></a>
+                    <br>
                 </div>
             </form>
-        </section>
-        
-        <section id="favorites">
-            <h2>Tus posts favoritos</h2>
+        </div>
+        <div class="favoritos">
+            <h2 class="favTitulo">Tus posts favoritos</h2>
             <% if (favorites.length > 0) { %>
                 <% for(let i = 0; i < favorites.length; i++) { %>
-                    <article class="blog-post">
+                    <div class="blogPost">
                         <a href="/post/<%= favorites[i].nombre %>">
-                            <img src="<%= favorites[i].portada %>" alt="<%= favorites[i].nombre %> portada" loading="lazy">
-                            <h1><%= favorites[i].nombre %></h1>
+                            <img src="<%= favorites[i].portada %>" alt="<%= favorites[i].nombre %> portada">
+                            <h2><%= favorites[i].nombre %></h2>
                             <p>Descubre más...</p>
                         </a>
                         <form action="/favorite/delete/<%= favorites[i].id %>" method="post">
-                            <button type="submit">Quitar de favoritos</button>
+                            <button type="submit"><i class="fa-solid fa-heart-crack fa-2xl" style="color: #ff0000;"></i></button>
                         </form>
-                    </article>
+                    </div>
+                    <br>
                 <% } %>
             <% } else { %>
                 <p>No tienes posts favoritos.</p>
                 <a href="/blog">Ver blog</a>
             <% } %>
+        </div>
+
+    </div>
+
+    <main>
+        <section id="account-details">
+            
+        </section>
+        
+        <section id="favorites">
+            
         </section>
     </main>
 </body>

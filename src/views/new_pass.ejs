@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/logo empty.png" type="image/png">
+    <link rel="stylesheet" href="new_pass.css">
     <title>Reestablecer contraseña</title>
 </head>
 <body>
     <%- include('partials/header') %>
-    <form action="/new_pass/<%= username %>" method="post">
-        <input type="password" name="pass" placeholder="Nueva contraseña" required>
-        <button>Aceptar</button>
-    </form>
+    <div class="new_pass">
+        <h1>Restablecer contraseña</h1>
+        <form action="/new_pass/<%= username %>" method="post">
+            <input type="password" name="pass" placeholder="Nueva contraseña" required>
+            <br>
+            <br>
+            <button>Aceptar</button>
+        </form>
+    </div>
 </body>
 </html>

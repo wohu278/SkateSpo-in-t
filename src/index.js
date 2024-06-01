@@ -14,7 +14,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(morgan('dev'))
 app.use('/static', express.static(path.join(__dirname, 'static')))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(mainRoute)
 
 app.listen(3000)
-console.log("Escuchando en el puerto 3000");
+console.log("Escuchando en el puerto 3000")

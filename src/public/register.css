@@ -1,0 +1,47 @@
+body {
+  overflow: hidden;
+  height: 100%;
+}
+
+h2 {
+  color: #357DED;
+}
+
+.register {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 30px;
+}
+.register .imgRegis {
+  width: 50%;
+}
+.register .imgRegis img {
+  width: 90%;
+  height: 65%;
+}
+.register .infoRegis {
+  width: 40%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.register .infoRegis input {
+  height: 35px;
+  width: 200px;
+  padding: 5px;
+}
+.register .infoRegis button {
+  background-color: #0287C0;
+  border: none;
+  color: white;
+  padding: 10px;
+  width: 20%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.register .infoRegis a {
+  color: black;
+  font-weight: bold;
+}/*# sourceMappingURL=register.css.map */

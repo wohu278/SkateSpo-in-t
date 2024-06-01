@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= post.nombre %></title>
+    <link rel="icon" href="/static/logo empty.png" type="image/png">
+    <link rel="stylesheet" href="/post/style.css">
+    <link rel="stylesheet" href="/post/post.css">
 </head>
 <body>
 
@@ -11,37 +14,47 @@
 
     <br>
 
-    <h1><%= post.nombre %></h1>
-    <p><%= post.descripcion %></p>
-    <iframe width="928" height="522" src="https://www.youtube.com/embed/<%= post.enlace %>" title="<%= post.nombre %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="post">
+        <h1><%= post.nombre %></h1>
+        <b><%= post.descripcion %></b>
+        <br>
+        <iframe width="928" height="522" src="https://www.youtube.com/embed/<%= post.enlace %>" title="<%= post.nombre %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <br>
+        <p><%= post.subtitulo %></p>
 
-    <h2>Comentarios</h2>
-    <% for(let i = 0; i<comments.length; i++) {%>
+    </div>
 
-        <b><%= comments[i].username %></b>
-        <p><%= comments[i].comentario %></p>
-        <p><%= comments[i].fecha %></p>
-        <% if(user_regis && comments[i].username === currentUser) { %>
-            <form action="/post/<%= post.nombre %>/comment/<%= comments[i].id %>/delete" method="post">
-                <button type="submit">Eliminar</button>
-            </form>
+    <div class="comentarios">
+        <h2>Comentarios</h2>
+        <% for(let i = 0; i<comments.length; i++) {%>
+
+            <b><%= comments[i].username %></b>
+            <p><%= comments[i].comentario %></p>
+            <p><%= comments[i].fecha %></p>
+            <% if(user_regis && comments[i].username === currentUser) { %>
+                <form action="/post/<%= post.nombre %>/comment/<%= comments[i].id %>/delete" method="post">
+                    <button type="submit">Eliminar</button>
+                </form>
+            <% } %>
+            <hr>
+            <br>
+
         <% } %>
-        <br>
-        <br>
 
-    <% } %>
+        <% if(user_regis) {%>
 
-    <% if(user_regis) {%>
+            <div class="comentUser">
+                <form action="/post/<%= post.nombre %>/comment" method="post">
+                    <textarea placeholder="Agregar un comentario:" name="comentario" required></textarea>
+                    <br>
+                    <button type="submit">Añadir</button>
+                </form>
+            </div>
 
-        <p>Agregar un comentario:</p>
-        <form action="/post/<%= post.nombre %>/comment" method="post">
-            <textarea name="comentario" required></textarea>
-            <button type="submit">Añadir</button>
-        </form>
-
-    <%} else {%>
-        <p><a href="/login">Inicia sesión para comentar</p></a>
-    <% } %>
+        <%} else {%>
+            <p><a href="/login">Inicia sesión para comentar</p></a>
+        <% } %>
+    </div>
 
 </body>
 </html>

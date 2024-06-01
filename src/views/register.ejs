@@ -4,14 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="icon" href="/static/logo empty.png" type="image/png">
 </head>
 <body>
     <%- include('partials/header') %>
-    <form action="/register" method="post">
-        <input type="text" placeholder="Nombre de usuario" name="username" required>
-        <input type="email" placeholder="Correo electrónico" name="email" required>
-        <input type="password" placeholder="Contraseña" name="pass" required>
-        <button>Registrarse</button>
-    </form>
+    <div class="register">
+        <div class="imgRegis">
+            <img src="/static/Croocked Hubba.jpg" alt="">
+        </div>
+        <div class="infoRegis">
+            <form action="/register" method="post">
+                <h2>Crear Cuenta</h2>
+                <input type="text" placeholder="Nombre de usuario" name="username" required>
+                <br>
+                <br>
+                <input type="email" placeholder="Correo electrónico" name="email" required>
+                <br>
+                <br>
+                <input type="password" placeholder="Contraseña" name="pass" required>
+                <br>
+                <br>
+                <input type="password" placeholder="Confirmar Contraseña" name="confirmPass" required>
+                <br>
+                <br>
+                <button>Crear Cuenta</button>
+                <br>
+                <br>
+                <span>¿Ya tienes cuenta ? <a href="/login">Inicia sesión</a></span>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
